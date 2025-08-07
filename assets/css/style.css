@@ -1,0 +1,28 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h1, h3 {
+  color: #343a40;
+}
+
+#results .card {
+  height: 100%;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+#reading-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
