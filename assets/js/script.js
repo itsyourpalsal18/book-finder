@@ -14,6 +14,9 @@ const searchInput = document.getElementById("search-input");
 const searchBtn   = document.getElementById("search-btn");
 const resultsEl   = document.getElementById("results");
 const historyEl   = document.getElementById("search-history");
+const HISTORY_KEY = "searchHistory";
+const READING_KEY = "readingList";
+const LAST_QUERY_KEY = "lastQuery";
 
 // Hook up search button
 searchBtn.addEventListener("click", () => {
@@ -33,10 +36,18 @@ searchInput.addEventListener("keydown", (e) => {
   }
 });
 
+const clearHistoryBtn = document.getElementById("clear-history");
+clearHistoryBtn.addEventListener("click", () => {
+  localStorage.removeItem(HISTORY_KEY);
+  renderHistory();
+});
+
 // Main search flow
 async function runSearch(query) {
   clearResults();
   showLoading();
+
+  localStorage.setItem(LAST_QUERY_KEY, query);
 
   try {
     const books = await fetchBooks(query);
@@ -81,22 +92,24 @@ function renderResults(items) {
 
     // column
     const col = document.createElement("div");
-    col.className = "col-md-4";
+    col.className = "col-12 col-sm-6 col-lg-4 mb-4";
 
     // card
     col.innerHTML = `
-      <div class="card h-100">
-        <img src="${thumb}" class="card-img-top" alt="Book cover for ${escapeHtml(title)}">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">${escapeHtml(title)}</h5>
-          <p class="card-text"><em>${escapeHtml(authors)}</em></p>
-          <p class="card-text">${escapeHtml(desc)}</p>
-          <div class="mt-auto d-grid gap-2">
-            <a class="btn btn-outline-primary btn-sm" href="${preview}" target="_blank" rel="noopener">Preview</a>
-            <button class="btn btn-success btn-sm" data-title="${escapeHtmlAttr(title)}">Save to Reading List</button>
-          </div>
+        <div class="card h-100">
+            <img src="${thumb}" loading="lazy" class="card-img-top" alt="Book cover for ${escapeHtml(title)}">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${escapeHtml(title)}</h5>
+                <p class="card-text"><em>${escapeHtml(authors)}</em></p>
+                <p class="card-text line-clamp-3">${escapeHtml(desc)}</p>
+                <div class="mt-auto d-grid gap-2">
+                    ${preview && preview !== '#'
+                        ? `<a class="btn btn-outline-primary btn-sm" href="${preview}" target="_blank" rel="noopener" aria-label="Preview ${escapeHtmlAttr(title)}">Preview</a>`
+                        : `<button class="btn btn-outline-secondary btn-sm" disabled aria-disabled="true" title="No preview available">No Preview</button>`}
+                    <button class="btn btn-success btn-sm" data-title="${escapeHtmlAttr(title)}" aria-label="Save ${escapeHtmlAttr(title)} to reading list">Save to Reading List</button>
+                </div>
+            </div>
         </div>
-      </div>
     `;
 
     // add save handler
@@ -176,6 +189,13 @@ function renderHistory() {
     li.addEventListener("click", () => runSearch(q));
     historyEl.appendChild(li);
   });
+
+  li.tabIndex = 0; // focusable
+    li.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            runSearch(q);
+        }
+    });
 }
 
 // Small helpers
@@ -212,3 +232,10 @@ function escapeHtmlAttr(str) {
 // init
 renderHistory();
 renderReadingList();
+
+// Auto-run last search (nice UX)
+const last = localStorage.getItem(LAST_QUERY_KEY);
+if (last) {
+  searchInput.value = last;
+  runSearch(last);
+}

@@ -28,3 +28,34 @@ h1, h3 {
 }
 
 .spinner-border { width: 2.5rem; height: 2.5rem; }
+
+/* Cards: consistent layout & nicer truncation */
+#results .card-img-top {
+  object-fit: cover;
+  height: 195px;
+}
+
+/* truncate long descriptions neatly */
+.line-clamp-3{
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* keep covers tidy */
+.card-img-top{
+  object-fit:cover;
+  height:195px; /* matches typical Google Books thumb height */
+}
+
+@media (max-width: 576px) {
+  .card-title { font-size: 1rem; }
+  .card-text  { font-size: 0.85rem; }
+}
+
+/* Better list spacing */
+#reading-list .list-group-item { gap: 0.5rem; }
+
+/* Spinner size */
+.spinner-border { width: 2.5rem; height: 2.5rem; }
