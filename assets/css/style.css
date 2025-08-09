@@ -26,3 +26,5 @@ h1, h3 {
   justify-content: space-between;
   align-items: center;
 }
+
+.spinner-border { width: 2.5rem; height: 2.5rem; }
