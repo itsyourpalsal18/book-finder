@@ -1,41 +1,86 @@
-body {
-  background-color: #f8f9fa;
-  font-family: 'Segoe UI', sans-serif;
+/* ---------- Theme tokens ---------- */
+:root{
+  --bg: #0f172a;            /* deep slate background */
+  --card: #ffffff;          /* card surface */
+  --text: #f8fafc;          /* primary text */
+  --muted: #cbd5e1;         /* secondary text */
+  --primary: #2563eb;       /* brand blue */
+  --primary-600:#1d4ed8;
+  --ring: rgba(37, 99, 235, .25);
+  --shadow: 0 8px 24px rgba(2, 6, 23, .16);
 }
 
-h1, h3 {
-  color: #343a40;
-}
-
-#results .card {
+/* ---------- Page ---------- */
+html, body {
   height: 100%;
 }
-
-.card-title {
-  font-size: 1.1rem;
-  font-weight: bold;
+body {
+  background:
+    radial-gradient(1200px 800px at 10% -10%, #172554 0%, transparent 60%),
+    radial-gradient(1000px 700px at 110% 10%, #1e293b 0%, transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.card-text {
-  font-size: 0.9rem;
-  color: #555;
+/* container breathing room */
+.container { max-width: 1120px; }
+
+/* ---------- Header ---------- */
+header p { color: #cbd5e1; }
+
+/* ---------- Search bar ---------- */
+.search-bar .form-control{
+  border-width: 2px;
+  border-color: transparent;
+  box-shadow: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-bar .form-control:focus{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 .25rem var(--ring);
+}
+.search-bar .btn-primary{
+  background: var(--primary);
+  border-color: var(--primary);
+  transition: transform .06s ease, background-color .2s ease;
+}
+.search-bar .btn-primary:hover{
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+  transform: translateY(-1px);
 }
 
-#reading-list li {
+/* ---------- Cards ---------- */
+#results .col-12, #results .col-sm-6, #results .col-lg-4 { display: flex; }
+#results .card{
+  border: 0;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform .12s ease, box-shadow .12s ease;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  background: var(--card);
 }
-
-.spinner-border { width: 2.5rem; height: 2.5rem; }
-
-/* Cards: consistent layout & nicer truncation */
-#results .card-img-top {
+#results .card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(2, 6, 23, .22);
+}
+.card-img-top{
   object-fit: cover;
   height: 195px;
 }
 
-/* truncate long descriptions neatly */
+/* body spacing & type */
+.card-body{ padding: 16px 16px 14px; }
+.card-title{ font-size: 1.05rem; font-weight: 700; margin-bottom: .25rem; }
+.card-text{ font-size: .925rem; color: var(--muted); }
+
+/* buttons area at bottom */
+.d-grid.gap-2 .btn{ border-radius: 12px; }
+
+/* ---------- Truncation helper ---------- */
 .line-clamp-3{
   display:-webkit-box;
   -webkit-line-clamp:3;
@@ -43,19 +88,28 @@ h1, h3 {
   overflow:hidden;
 }
 
-/* keep covers tidy */
-.card-img-top{
-  object-fit:cover;
-  height:195px; /* matches typical Google Books thumb height */
+/* ---------- Lists (history & reading list) ---------- */
+#search-history .list-group-item,
+#reading-list .list-group-item{
+  border: 1px solid rgba(148,163,184,.18);
+  background: rgba(255,255,255,.9);
+  transition: background-color .12s ease, transform .06s ease, box-shadow .12s ease;
+}
+#search-history .list-group-item:hover{
+  background: #eef2ff;
+  cursor: pointer;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(2, 6, 23, .12);
+}
+#reading-list .list-group-item{
+  display: flex; justify-content: space-between; align-items: center;
 }
 
-@media (max-width: 576px) {
+/* ---------- Spinner (loading) ---------- */
+.spinner-border{ width: 2.5rem; height: 2.5rem; }
+
+/* ---------- Responsive niceties ---------- */
+@media (max-width: 576px){
   .card-title { font-size: 1rem; }
-  .card-text  { font-size: 0.85rem; }
+  .card-text  { font-size: .85rem; }
 }
-
-/* Better list spacing */
-#reading-list .list-group-item { gap: 0.5rem; }
-
-/* Spinner size */
-.spinner-border { width: 2.5rem; height: 2.5rem; }
